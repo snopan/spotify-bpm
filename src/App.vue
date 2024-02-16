@@ -44,10 +44,10 @@ const onSelect = async (selected: SimpleTrack | SimpleArtist) => {
 }
 
 const onClickHome = () => {
-  window.location.hostname = window.location.hostname
+  window.location.href = window.location.href
 }
 const onClickGithub = () => {
-  window.location.hostname = "https://github.com/snopan/spotify-bpm"
+  window.location.href = "https://github.com/snopan/spotify-bpm"
 }
 </script>
 
