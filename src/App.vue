@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FwbButton, FwbSpinner } from 'flowbite-vue'
-import { SimpleArtist, SimpleTrack, findOrCreateSpotifyBPMPlaylist, useSDK } from "./composable/spotify"
+import { SimpleArtist, SimpleTrack, findOrCreateSpotifyBPMPlaylist, isSimpleTrack, useSDK } from "./composable/spotify"
 import { FwbToast } from 'flowbite-vue'
 import { ref, onMounted, Ref } from 'vue';
 import Search from "./components/Search.vue"
@@ -33,8 +33,12 @@ onMounted(async () => {
   loading.value = false
 })
 
-const onSelect = (selected: SimpleTrack | SimpleArtist) => {
+const onSelect = async (selected: SimpleTrack | SimpleArtist) => {
   loading.value = true
+  if (isSimpleTrack(selected)) {
+    const features = await sdk.tracks.audioFeatures(selected.id)
+    selected.tempo = features.tempo
+  }
   selectedTrackOrArtist.value = selected
   loading.value = false
 }
@@ -55,7 +59,7 @@ const onSelect = (selected: SimpleTrack | SimpleArtist) => {
       Spotify
     </FwbButton>
     <div v-else class="w-full h-full p-1 sm:p-16">
-      <Search v-show="!selectedTrackOrArtist" @select="(s) => " />
+      <Search v-show="!selectedTrackOrArtist" @select="onSelect" />
       <Generate v-if="selectedTrackOrArtist" :selected="selectedTrackOrArtist" :playlistID="playlistID" />
     </div>
   </div>
