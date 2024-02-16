@@ -3,6 +3,10 @@ import { Ref, defineProps, onMounted, ref } from 'vue';
 import { FwbButton, FwbSpinner } from 'flowbite-vue'
 import { SimpleArtist, SimpleTrack, isSimpleTrack, getRecommendations, updatePlaylist, trackIDToURI } from '../composable/spotify';
 
+const emit = defineEmits<{
+  (event: 'back'): void
+}>()
+
 const props = defineProps<{
   selected: SimpleTrack | SimpleArtist,
   playlistID: string,
@@ -39,6 +43,11 @@ const generate = async () => {
 
 <template>
   <div class="w-full h-full flex flex-col items-center justify-center">
+    <FwbButton class="absolute left-4 top-3" color="dark" @click="emit('back')" pill outline square>
+      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+      </svg>
+    </FwbButton>
     <div class="w-11/12 sm:w-auto flex p-4 bg-neutral-900 my-6">
       <img class="w-24 aspect-square" :src="props.selected.image" />
       <div class="text-left ml-4">
@@ -77,10 +86,12 @@ const generate = async () => {
         </FwbButton>
       </div>
     </div>
-    <FwbButton class="mb-6" color="green" size="xl" :disabled="loading" @click="generate">Generate</FwbButton>
+    <FwbButton class="mb-6" color="green" size="xl" :disabled="loading" @click="generate">
+      {{ loading ? "Generating" : "Generate" }}
+    </FwbButton>
     <div v-if="loading || recommendations.length" class="w-full h-full overflow-y-auto p-2 flex items-center justify-center bg-neutral-900">
       <FwbSpinner v-if="loading" size="12" />
-      <div v-else class="w-full h-full flex flex-col">
+      <div v-else class="w-full h-full grid grid-cols-1 sm:grid-cols-2">
         <div v-for="t in recommendations" class="flex p-4">
           <img class="w-20 aspect-square" :src="t.image" />
           <div class="text-left ml-4">

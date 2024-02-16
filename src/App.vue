@@ -42,6 +42,10 @@ const onSelect = async (selected: SimpleTrack | SimpleArtist) => {
   selectedTrackOrArtist.value = selected
   loading.value = false
 }
+
+const onClickNav = () => {
+  window.location.hostname = window.location.hostname
+}
 </script>
 
 
@@ -49,7 +53,9 @@ const onSelect = async (selected: SimpleTrack | SimpleArtist) => {
   <div class="absolute right-5 top-5">
     <FwbToast v-for="err in errors" type="danger" closable>{{ err }}</FwbToast>
   </div>
-  <div class="absolute w-full h-16 text-center p-5 bg-neutral-900">Spotify-bpm</div>
+  <div class="absolute w-full h-16 flex items-center justify-center bg-neutral-900">
+    <div class="text-xl pb-3 px-8 cursor-pointer" @click="onClickNav">Spotify-bpm</div>
+  </div>
   <div class="w-screen h-screen pt-16 flex items-center justify-center bg-neutral-800">
     <div v-if="loading" class="flex items-center">
       <FwbSpinner class="m-5" size="12" />
@@ -59,8 +65,13 @@ const onSelect = async (selected: SimpleTrack | SimpleArtist) => {
       Spotify
     </FwbButton>
     <div v-else class="w-full h-full p-1 sm:p-16">
-      <Search v-show="!selectedTrackOrArtist" @select="onSelect" />
-      <Generate v-if="selectedTrackOrArtist" :selected="selectedTrackOrArtist" :playlistID="playlistID" />
+      <Search v-if="!selectedTrackOrArtist" @select="onSelect" />
+      <Generate
+        v-else
+        :selected="selectedTrackOrArtist"
+        :playlistID="playlistID"
+        @back="selectedTrackOrArtist = null"
+      />
     </div>
   </div>
 </template>
