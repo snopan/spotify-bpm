@@ -27,7 +27,6 @@ const sdk = SpotifyApi.withUserAuthorization(
     import.meta.env.VITE_REDIRECT_URL || "",
     [
         "playlist-read-private",
-        // "playlist-modify-public",
         "playlist-modify-private",
     ]
 )
