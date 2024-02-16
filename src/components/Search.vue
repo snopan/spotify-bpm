@@ -11,10 +11,14 @@ const emit = defineEmits<{
 }>()
 const query = ref("")
 const queryResult: Ref<SearchResult | null> = ref(null)
+const numTracksShown = ref(5)
+const numArtistsShown = ref(5)
 
 let waitTyping: NodeJS.Timeout | null = null
 const onInput = () => {
   queryResult.value = null
+  numTracksShown.value = 5
+  numArtistsShown.value = 5
   if (query.value) {
     if (waitTyping) {
       clearTimeout(waitTyping)
@@ -39,7 +43,7 @@ const makeQuery = async () => {
     <div v-if="query" class="w-full h-full min-h-full mt-1 sm:mt-4 flex flex-col items-center justify-center bg-neutral-900">
       <FwbSpinner v-if="!queryResult" size="12" />
       <div v-else class="w-full h-full overflow-x-auto">
-        <div v-for="t in queryResult?.tracks.slice(0, 5)"
+        <div v-for="t in queryResult?.tracks.slice(0, numTracksShown)"
           class="flex items-center w-full p-4 hover:bg-neutral-700 cursor-pointer" @click="emit('select', t)">
           <img class="h-10 aspect-square" :src="t.image" />
           <div class="text-left ml-4">
@@ -47,14 +51,26 @@ const makeQuery = async () => {
             <div class="text-slate-400">{{ t.artist }}</div>
           </div>
         </div>
-        <div class="text-neutral-400 p-2 hover:text-blue-500 cursor-pointer">Load more songs...</div>
+        <div
+          v-if="numTracksShown < queryResult?.tracks.length"
+          @click="numTracksShown += 5"
+          class="text-neutral-400 p-2 hover:text-blue-500 cursor-pointer"
+        >
+          Load more songs...
+        </div>
         <div class="w-11/12 h-0.5 bg-neutral-700 mx-auto my-5" />
-        <div v-for="a in queryResult?.artists.slice(0, 5)"
+        <div v-for="a in queryResult?.artists.slice(0, numArtistsShown)"
           class="flex items-center w-full p-4 hover:bg-neutral-700 cursor-pointer" @click="emit('select', a)">
           <img class="h-10 aspect-square" :src="a.image" />
           <div class="text-left ml-4 text-lg">{{ a.name }}</div>
         </div>
-        <div class="text-neutral-400 p-2 hover:text-blue-500 cursor-pointer">Load more artists...</div>
+        <div
+          v-if="numArtistsShown < queryResult?.artists.length"
+          @click="numArtistsShown += 5"
+          class="text-neutral-400 p-2 hover:text-blue-500 cursor-pointer"
+        >
+          Load more artists...
+        </div>
       </div>
     </div>
   </div>

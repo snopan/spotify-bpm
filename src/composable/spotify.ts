@@ -2,6 +2,8 @@
 import { SpotifyApi, SimplifiedPlaylist, RecommendationsRequest, Track } from '@spotify/web-api-ts-sdk';
 
 const SPOTIFY_BPM_PLAYLIST_NAME = "-spotify bpm-"
+const SEARCH_LIMIT = 20
+const RECOMMEND_LIMIT = 30
 
 export type SimpleTrack = {
     id: string,
@@ -36,7 +38,7 @@ export const useSDK = () => {
 }
 
 export const searchTracksAndArtists = async (q: string): Promise<SearchResult> => {
-    const result = await sdk.search(q, ["track", "artist"])
+    const result = await sdk.search(q, ["track", "artist"], undefined, SEARCH_LIMIT)
     const tracks: SimpleTrack[] = result.tracks.items.map(trackToSimpleTrack)
     const artists: SimpleArtist[] = result.artists.items.map(a => ({
         id: a.id,
@@ -66,7 +68,7 @@ export const findOrCreateSpotifyBPMPlaylist = async (userID: string): Promise<st
 export const getRecommendations = async(seed: SimpleArtist | SimpleArtist, tempo: number): Promise<SimpleTrack[]> => {
     let payload: RecommendationsRequest = {
         target_tempo: tempo,
-        limit: 30
+        limit: RECOMMEND_LIMIT
     }
 
     if (isSimpleTrack(seed)) {
