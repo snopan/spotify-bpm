@@ -1,0 +1,61 @@
+<script setup lang="ts">
+import { FwbInput, FwbSpinner } from 'flowbite-vue';
+import { Ref, ref, defineEmits } from 'vue';
+import { SearchResult, SimpleArtist, SimpleTrack } from '../composable/spotify';
+import { searchTracksAndArtists } from '../composable/spotify';
+
+const INPUT_WAIT_TIME = 2000
+
+const emit = defineEmits<{
+  (event: 'select', selected: SimpleTrack | SimpleArtist): void
+}>()
+const query = ref("")
+const queryResult: Ref<SearchResult | null> = ref(null)
+
+let waitTyping: NodeJS.Timeout | null = null
+const onInput = () => {
+  queryResult.value = null
+  if (query.value) {
+    if (waitTyping) {
+      clearTimeout(waitTyping)
+    }
+    waitTyping = setTimeout(makeQuery, INPUT_WAIT_TIME)
+  }
+}
+const makeQuery = async () => {
+  const q = query.value
+  if (!q) return
+  const result = await searchTracksAndArtists(q)
+  queryResult.value = result
+}
+</script>
+
+<template>
+  <div class="w-full h-full pb-32 flex flex-col items-center">
+    <div :class="'transition-all ' + (query ? 'mt-0 w-full' : 'w-1/2 mt-36')">
+      <div v-if="!query">Pick a song or artist you like...</div>
+      <FwbInput v-model="query" class="w-full mt-4" placeholder="Enter here..." :oninput="onInput" />
+    </div>
+    <div v-if="query" class="w-full h-full min-h-full mt-4 flex flex-col items-center justify-center bg-neutral-900">
+      <FwbSpinner v-if="!queryResult" size="12" />
+      <div v-else class="w-full h-full overflow-x-auto">
+        <div v-for="t in queryResult?.tracks.slice(0, 5)"
+          class="flex items-center w-full p-4 hover:bg-neutral-700 cursor-pointer" @click="emit('select', t)">
+          <img class="h-10 aspect-square" :src="t.image" />
+          <div class="text-left ml-4">
+            <div class="text-lg">{{ t.name }}</div>
+            <div class="text-slate-400">{{ t.artist }}</div>
+          </div>
+        </div>
+        <div class="text-neutral-400 p-2 hover:text-blue-500 cursor-pointer">Load more songs...</div>
+        <div class="w-11/12 h-0.5 bg-neutral-700 mx-auto my-5" />
+        <div v-for="a in queryResult?.artists.slice(0, 5)"
+          class="flex items-center w-full p-4 hover:bg-neutral-700 cursor-pointer" @click="emit('select', a)">
+          <img class="h-10 aspect-square" :src="a.image" />
+          <div class="text-left ml-4 text-lg">{{ a.name }}</div>
+        </div>
+        <div class="text-neutral-400 p-2 hover:text-blue-500 cursor-pointer">Load more artists...</div>
+      </div>
+    </div>
+  </div>
+</template>
