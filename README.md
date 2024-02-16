@@ -1,18 +1,24 @@
-# Vue 3 + TypeScript + Vite
+# Spotify-bpm
+This is a web application that aims to provide suggested songs for user based on song or artist they like in the tempo they want. The application uses the official [spotify api](https://developer.spotify.com/) to search for songs or artists, generate recommendations then finally creating and modifying a playlist to store the generated songs for easy access. The authentication is done through [PKCE OAuth flow](https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow) so the applications does not require a backend server.
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Requirements
+You will need to login to spotify via the OAuth flow, meaning a spotify account is required to use this application. The application works with free accounts.
 
-## Recommended IDE Setup
+## Tech stack
+The application is built as a single page applicaiton using [Vue 3](https://vuejs.org/), Typescript, [Tailwind CSS](https://tailwindcss.com/) and [Flowbite Vue 3](https://flowbite-vue.com/)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Running locally
+To run this locally you must have [Node](https://nodejs.org/en) installed
 
-## Type Support For `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+First pulling down the repo
+```
+git clone https://github.com/snopan/spotify-bpm.git
+```
+Then install the dependencies
+```
+npm install
+```
+Finally running the application locally
+```
+npm run dev
+```
