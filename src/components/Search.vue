@@ -31,12 +31,12 @@ const makeQuery = async () => {
 </script>
 
 <template>
-  <div class="w-full h-full pb-32 flex flex-col items-center">
-    <div :class="'transition-all ' + (query ? 'mt-0 w-full' : 'w-1/2 mt-36')">
-      <div v-if="!query">Pick a song or artist you like...</div>
-      <FwbInput v-model="query" class="w-full mt-4" placeholder="Enter here..." :oninput="onInput" />
+  <div class="w-full h-full pt-4 pb-16 sm:pb-24  flex flex-col items-center">
+    <div :class="'transition-all ' + (query ? 'mt-0 w-full' : 'w-3/4 sm:w-1/2 mt-36')">
+      <div v-if="!query" class="mb-4">Pick a song or artist you like...</div>
+      <FwbInput v-model="query" class="w-full" placeholder="Enter here..." :oninput="onInput" />
     </div>
-    <div v-if="query" class="w-full h-full min-h-full mt-4 flex flex-col items-center justify-center bg-neutral-900">
+    <div v-if="query" class="w-full h-full min-h-full mt-1 sm:mt-4 flex flex-col items-center justify-center bg-neutral-900">
       <FwbSpinner v-if="!queryResult" size="12" />
       <div v-else class="w-full h-full overflow-x-auto">
         <div v-for="t in queryResult?.tracks.slice(0, 5)"

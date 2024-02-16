@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FwbButton, FwbSpinner } from 'flowbite-vue'
-import { SimpleArtist, SimpleTrack, useSDK } from "./composable/spotify"
+import { SimpleArtist, SimpleTrack, findOrCreateSpotifyBPMPlaylist, useSDK } from "./composable/spotify"
 import { FwbToast } from 'flowbite-vue'
 import { ref, onMounted, Ref } from 'vue';
 import Search from "./components/Search.vue"
@@ -12,6 +12,7 @@ const loading = ref(true)
 const authenticated = ref(false)
 const errors: Ref<string[]> = ref([])
 const selectedTrackOrArtist: Ref<SimpleTrack | SimpleArtist | null> = ref(null)
+const playlistID = ref("")
 
 onMounted(async () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -24,12 +25,19 @@ onMounted(async () => {
     errors.value.push("Unable to login to spotify due to: " + err)
   }
   if (await sdk.getAccessToken() != null) {
+    const userID = (await sdk.currentUser.profile()).id
+    const pid = await findOrCreateSpotifyBPMPlaylist(userID)
+    playlistID.value = pid
     authenticated.value = true
   }
   loading.value = false
 })
 
-
+const onSelect = (selected: SimpleTrack | SimpleArtist) => {
+  loading.value = true
+  selectedTrackOrArtist.value = selected
+  loading.value = false
+}
 </script>
 
 
@@ -47,8 +55,8 @@ onMounted(async () => {
       Spotify
     </FwbButton>
     <div v-else class="w-full h-full p-1 sm:p-16">
-      <Search v-show="!selectedTrackOrArtist" @select="(s) => selectedTrackOrArtist = s" />
-      <Generate v-if="selectedTrackOrArtist" :selected="selectedTrackOrArtist" />
+      <Search v-show="!selectedTrackOrArtist" @select="(s) => " />
+      <Generate v-if="selectedTrackOrArtist" :selected="selectedTrackOrArtist" :playlistID="playlistID" />
     </div>
   </div>
 </template>

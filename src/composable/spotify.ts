@@ -25,16 +25,15 @@ const sdk = SpotifyApi.withUserAuthorization(
     import.meta.env.VITE_CLIENT_ID || "",
     import.meta.env.VITE_REDIRECT_URL || "",
     [
-        "user-read-currently-playing",
-        "user-read-playback-state",
-        "user-read-recently-played"
+        "playlist-read-private",
+        // "playlist-modify-public",
+        "playlist-modify-private",
     ]
 )
 
 export const useSDK = () => {
     return sdk
 }
-
 
 export const searchTracksAndArtists = async (q: string): Promise<SearchResult> => {
     const result = await sdk.search(q, ["track", "artist"])
