@@ -43,8 +43,11 @@ const onSelect = async (selected: SimpleTrack | SimpleArtist) => {
   loading.value = false
 }
 
-const onClickNav = () => {
+const onClickHome = () => {
   window.location.hostname = window.location.hostname
+}
+const onClickGithub = () => {
+  window.location.hostname = "https://github.com/snopan/spotify-bpm"
 }
 </script>
 
@@ -54,7 +57,12 @@ const onClickNav = () => {
     <FwbToast v-for="err in errors" type="danger" closable>{{ err }}</FwbToast>
   </div>
   <div class="absolute w-full h-16 flex items-center justify-center bg-neutral-900">
-    <div class="text-xl pb-3 px-8 cursor-pointer" @click="onClickNav">Spotify-bpm</div>
+    <div class="text-xl pb-3 px-8 cursor-pointer" @click="onClickHome">Spotify-bpm</div>
+    <FwbButton class="absolute right-4 top-3" color="dark" @click="onClickGithub" outline square>
+      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" d="M12 2c-2.4 0-4.7.9-6.5 2.4a10.5 10.5 0 0 0-2 13.1A10 10 0 0 0 8.7 22c.5 0 .7-.2.7-.5v-2c-2.8.7-3.4-1.1-3.4-1.1-.1-.6-.5-1.2-1-1.5-1-.7 0-.7 0-.7a2 2 0 0 1 1.5 1.1 2.2 2.2 0 0 0 1.3 1 2 2 0 0 0 1.6-.1c0-.6.3-1 .7-1.4-2.2-.3-4.6-1.2-4.6-5 0-1.1.4-2 1-2.8a4 4 0 0 1 .2-2.7s.8-.3 2.7 1c1.6-.5 3.4-.5 5 0 2-1.3 2.8-1 2.8-1 .3.8.4 1.8 0 2.7a4 4 0 0 1 1 2.7c0 4-2.3 4.8-4.5 5a2.5 2.5 0 0 1 .7 2v2.8c0 .3.2.6.7.5a10 10 0 0 0 5.4-4.4 10.5 10.5 0 0 0-2.1-13.2A9.8 9.8 0 0 0 12 2Z" clip-rule="evenodd"/>
+      </svg>
+    </FwbButton>
   </div>
   <div class="w-screen h-screen pt-16 flex items-center justify-center bg-neutral-800">
     <div v-if="loading" class="flex items-center">
