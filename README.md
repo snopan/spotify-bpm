@@ -1,3 +1,6 @@
+> [!Broken]
+> Spotify API has depreacted a key endpoint [/audio-features](https://developer.spotify.com/documentation/web-api/reference/get-audio-features) meaning we can't get the tempo of a particular song. There's a potential fix where using a separate [API](https://reccobeats.com/docs/apis/get-track-audio-features) for finding tempo and songs then mapping that back to Spotify tracks but currently as there's little time for this project.
+
 # Spotify-bpm
 This is a web application that aims to provide suggested songs for user based on song or artist they like in the tempo they want. The main goal or use case for this application was for my own workout needs, where I find that songs with a tempo that matches my current movement speed helps me dramatically to continue that exercise.
 
